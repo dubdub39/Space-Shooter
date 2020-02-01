@@ -1,0 +1,236 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+
+public class Player : MonoBehaviour
+{
+   
+    [SerializeField]
+    float speed = 3.5f;
+
+    [SerializeField]
+    float powerUpSpeed = 8.5f;
+
+    [SerializeField]
+    GameObject laserPrefab;
+
+    [SerializeField]
+    GameObject tripleLaserPrefab;
+
+    [SerializeField]
+    private float fireRate = 1f;
+
+    private float canFire = -1f;
+
+    [SerializeField]
+    Vector3 offSet = new Vector3(0, 1.05f, 0);
+
+    [SerializeField]
+    Vector3 tripleLaserOffset = new Vector3(-1.55f, 1.05f, 0);
+
+    [SerializeField]
+    private int lives = 3;
+
+    private SpawnManager spawnManager;
+
+    private bool isTripleShotActive = false;
+    private bool isSpeedPowerupActive = false;
+    private bool isShieldActive = false;
+    private bool isPlayerDamaged = false;
+   
+    [SerializeField]
+    GameObject shield; //variable reference to the shield visualizer
+
+    [SerializeField]
+    GameObject rightEngineDmg, leftEngineDmg;
+
+    [SerializeField]
+    private AudioSource soundSource;
+
+    [SerializeField]
+    private AudioClip laserShot;
+
+    [SerializeField]
+    private AudioClip _explosion;
+
+    [SerializeField]
+    private AudioClip _playerHit;
+
+    [SerializeField]
+    private AudioClip _powerUp;
+
+    [SerializeField]
+    private AudioClip _powerDown;
+
+    [SerializeField]
+    GameObject playerExplosion;
+
+    [SerializeField]
+    private int score;
+
+    private UI_Manager _uiManager;
+
+    void Start()
+    {
+        transform.position = new Vector3(0, 0, 0);
+        spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
+        _uiManager = GameObject.Find("Canvas").GetComponent<UI_Manager>();
+
+        if (spawnManager == null)
+        {
+            Debug.LogError("The spawn manager is NULL.");
+        }
+
+        if (_uiManager == null)
+        {
+            Debug.LogError("The UI Manager is NULL.");
+        }
+
+        rightEngineDmg.SetActive(false);
+        leftEngineDmg.SetActive(false);
+
+        soundSource = GetComponent<AudioSource>();
+        soundSource.clip = laserShot;
+    }
+    void Update()
+    {
+        CalculateMovement();
+
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > canFire)
+        {
+            FireLaser();
+        }
+    }
+
+    void CalculateMovement()
+    {
+        float horizontalInput = Input.GetAxis("Horizontal");
+        float verticalInput = Input.GetAxis("Vertical");
+
+        Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
+
+        if (isSpeedPowerupActive)
+        {
+            transform.Translate(direction * powerUpSpeed * Time.deltaTime);
+            
+        } else
+        {
+            transform.Translate(direction * speed * Time.deltaTime);
+        }
+        
+                
+        if (transform.position.y >= 0)
+        {
+            transform.position = new Vector3(transform.position.x, 0, 0);
+        }
+        else if (transform.position.y <= -4)
+        {
+            transform.position = new Vector3(transform.position.x, -4, 0);
+        }
+        if (transform.position.x <= -11)
+        {
+            transform.position = new Vector3(11, transform.position.y, 0);
+        }
+        else if (transform.position.x >= 11)
+        {
+            transform.position = new Vector3(-11, transform.position.y, 0);
+        /*Limiting the y movement can also be done via "clamping." A function called
+         * Mathf.Clamp can be used with a single line of code to limit movement 
+         between two values.  We would code as follows:
+         
+         transform.position = new Vector3(transform.position.x, Mathf.Clamp(transform.position.y, -4, 0), 0)
+         */
+        }     
+    }
+    void FireLaser()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > canFire)
+        {
+            soundSource.Play();
+            canFire = Time.time + fireRate;
+            if (isTripleShotActive)
+            {
+                Instantiate(tripleLaserPrefab, transform.position + tripleLaserOffset, Quaternion.identity);
+            } else
+            {
+                Instantiate(laserPrefab, transform.position + offSet, Quaternion.identity);
+            }
+        }
+    }
+
+    public void Damage()
+    {
+        if (isShieldActive == true)
+        {
+            isShieldActive = false;
+            shield.SetActive(false);
+            soundSource.PlayOneShot(_powerDown);
+            return;
+                        
+        } else
+    
+        lives -= 1;
+        soundSource.PlayOneShot(_playerHit);
+        _uiManager.UpdateLives(lives);
+
+        if (lives == 2)
+        {
+            rightEngineDmg.SetActive(true);
+        }
+
+        if (lives == 1)
+        {
+            leftEngineDmg.SetActive(true);
+        }
+
+        if (lives < 1)
+        {
+            spawnManager.OnPlayserDeath();
+            soundSource.PlayOneShot(_explosion);
+            Instantiate(playerExplosion, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
+        }
+    }
+
+    public void TripleShotActive()
+    {
+        isTripleShotActive = true;
+        StartCoroutine(TripleShotPowerDownRoutine());
+    }
+
+    IEnumerator TripleShotPowerDownRoutine()
+    {
+        yield return new WaitForSeconds(5f);
+        isTripleShotActive = false;
+    }
+
+    public void SpeedPowerupActive()
+    {
+        isSpeedPowerupActive = true;
+        StartCoroutine(SpeedPowerDownCoroutine());
+    }
+
+    IEnumerator SpeedPowerDownCoroutine()
+    {
+        yield return new WaitForSeconds(5f);
+        isSpeedPowerupActive = false;
+    }
+
+    public void ShieldPowerUp()
+    {
+        if (isShieldActive == false)
+        {
+            soundSource.PlayOneShot(_powerUp);
+        }
+        isShieldActive = true;
+        shield.SetActive(true);
+    }
+
+    public void AddScore(int points)
+    {
+        score += points;
+        _uiManager.UpdateScore(score);
+    }
+    
+}
