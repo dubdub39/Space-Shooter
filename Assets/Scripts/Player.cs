@@ -10,7 +10,12 @@ public class Player : MonoBehaviour
     float speed = 3.5f;
 
     [SerializeField]
+    float shiftSpeed = 1.2f;
+
+    [SerializeField]
     float powerUpSpeed = 8.5f;
+
+    private int _shieldDamage;
 
     [SerializeField]
     GameObject laserPrefab;
@@ -110,11 +115,23 @@ public class Player : MonoBehaviour
 
         Vector3 direction = new Vector3(horizontalInput, verticalInput, 0);
 
+        
+        
         if (isSpeedPowerupActive)
         {
-            transform.Translate(direction * powerUpSpeed * Time.deltaTime);
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                transform.Translate(direction * powerUpSpeed * shiftSpeed * Time.deltaTime);
+            } else
+            {
+                transform.Translate(direction * powerUpSpeed * Time.deltaTime);
+            }
             
-        } else
+            
+        } else if (isSpeedPowerupActive == false && Input.GetKey(KeyCode.LeftShift))
+        {
+            transform.Translate(direction * speed * shiftSpeed * Time.deltaTime);
+        }  else
         {
             transform.Translate(direction * speed * Time.deltaTime);
         }
@@ -163,11 +180,32 @@ public class Player : MonoBehaviour
     {
         if (isShieldActive == true)
         {
-            isShieldActive = false;
-            shield.SetActive(false);
-            soundSource.PlayOneShot(_powerDown);
-            return;
-                        
+            if (_shieldDamage == 3)
+            {
+                _shieldDamage--;
+                shield.GetComponent<SpriteRenderer>().color = Color.blue;
+            }
+
+            else if (_shieldDamage == 2)
+            {
+                _shieldDamage--;
+                shield.GetComponent<SpriteRenderer>().color = Color.yellow;
+            }
+
+            else if (_shieldDamage == 1)
+            {
+                _shieldDamage--;
+                shield.GetComponent<SpriteRenderer>().color = Color.grey;
+            }
+            else
+            {
+                isShieldActive = false;
+                {
+                    shield.SetActive(false);
+                    soundSource.PlayOneShot(_powerDown);
+                    return;
+                }
+        }                        
         } else
     
         lives -= 1;
@@ -225,7 +263,9 @@ public class Player : MonoBehaviour
         }
         isShieldActive = true;
         shield.SetActive(true);
-    }
+        _shieldDamage = 3;
+        shield.GetComponent<SpriteRenderer>().color = Color.green;
+        }
 
     public void AddScore(int points)
     {
