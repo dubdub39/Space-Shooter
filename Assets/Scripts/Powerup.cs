@@ -46,6 +46,9 @@ public class Powerup : MonoBehaviour
                     case 2:
                         player.ShieldPowerUp();
                         break;
+                    case 3:
+                        player.HealthPowerUp();
+                        break;
                     default:
                         print("default value");
                         break;

@@ -76,6 +76,8 @@ public class Player : MonoBehaviour
 
     private UI_Manager _uiManager;
 
+    CameraShake cameraShake;
+
     void Start()
     {
         transform.position = new Vector3(0, 0, 0);
@@ -178,6 +180,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+
         if (isShieldActive == true)
         {
             if (_shieldDamage == 3)
@@ -205,9 +208,9 @@ public class Player : MonoBehaviour
                     soundSource.PlayOneShot(_powerDown);
                     return;
                 }
-        }                        
-        } else
-    
+            }
+        }
+        else
         lives -= 1;
         soundSource.PlayOneShot(_playerHit);
         _uiManager.UpdateLives(lives);
@@ -265,9 +268,27 @@ public class Player : MonoBehaviour
         shield.SetActive(true);
         _shieldDamage = 3;
         shield.GetComponent<SpriteRenderer>().color = Color.green;
-        }
+    }
 
-    public void AddScore(int points)
+    public void HealthPowerUp()
+    {
+        if (lives < 3) 
+        { 
+            lives++;
+            _uiManager.UpdateLives(lives);
+            if (lives == 3)
+            {
+             rightEngineDmg.SetActive(false);
+            }
+
+            if (lives == 2)
+            {
+              leftEngineDmg.SetActive(false);
+            }
+        }
+    }
+
+     public void AddScore(int points)
     {
         score += points;
         _uiManager.UpdateScore(score);
