@@ -7,7 +7,7 @@ public class Powerup : MonoBehaviour
     [SerializeField]
     private int powerUpSpeeed = 3;
 
-    [SerializeField]    //0 = triple_shot, 1 = speed, 2 = shields
+    [SerializeField]    //0 = triple_shot, 1 = speed, 2 = shields, 3 = health
     private int powerupID;
 
     

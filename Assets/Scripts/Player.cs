@@ -24,6 +24,9 @@ public class Player : MonoBehaviour
     GameObject tripleLaserPrefab;
 
     [SerializeField]
+    CameraShake cameraShake;
+
+    [SerializeField]
     private float fireRate = 1f;
 
     private float canFire = -1f;
@@ -75,8 +78,6 @@ public class Player : MonoBehaviour
     private int score;
 
     private UI_Manager _uiManager;
-
-    CameraShake cameraShake;
 
     void Start()
     {
@@ -180,6 +181,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
+        cameraShake.InduceStress(1);
 
         if (isShieldActive == true)
         {
