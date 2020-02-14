@@ -181,7 +181,7 @@ public class Player : MonoBehaviour
 
     public void Damage()
     {
-        cameraShake.InduceStress(1);
+        cameraShake.CreateShake(1);
 
         if (isShieldActive == true)
         {
