@@ -21,11 +21,20 @@ public class UI_Manager : MonoBehaviour
     [SerializeField]
     private Text restartLevelText;
 
+    [SerializeField]
+    private Text ammoText;
+
     private Game_Manager gameManager;
+
+    public Player player;
+
+    [SerializeField]
+    private int _playerAmmo = 15;
 
     void Start()
     {
-        scoreText.text = "Score: " + 0;
+        scoreText.text = "Score: " +  0;
+        ammoText.text = "Ammo: " + 15;
         gameOverText.gameObject.SetActive(false);
         restartLevelText.gameObject.SetActive(false);
         gameManager = GameObject.Find("Game_Manager").GetComponent<Game_Manager>();

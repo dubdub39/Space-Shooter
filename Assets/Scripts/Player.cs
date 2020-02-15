@@ -72,12 +72,21 @@ public class Player : MonoBehaviour
     private AudioClip _powerDown;
 
     [SerializeField]
+    private AudioClip _noAmmo;
+
+    [SerializeField]
+    private AudioClip _reload;
+
+    [SerializeField]
     GameObject playerExplosion;
 
     [SerializeField]
     private int score;
 
     private UI_Manager _uiManager;
+
+    [SerializeField]
+    private int _playerAmmo = 15;
 
     void Start()
     {
@@ -167,15 +176,31 @@ public class Player : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && Time.time > canFire)
         {
-            soundSource.Play();
-            canFire = Time.time + fireRate;
-            if (isTripleShotActive)
+            
             {
-                Instantiate(tripleLaserPrefab, transform.position + tripleLaserOffset, Quaternion.identity);
-            } else
-            {
-                Instantiate(laserPrefab, transform.position + offSet, Quaternion.identity);
+                
+                canFire = Time.time + fireRate;
+                if (isTripleShotActive)
+                {
+                    soundSource.Play();
+                    Instantiate(tripleLaserPrefab, transform.position + tripleLaserOffset, Quaternion.identity);
+                }
+                else
+                {
+                    if(_playerAmmo > 0)
+                    {
+                        _playerAmmo--;
+                        soundSource.Play();
+                        Instantiate(laserPrefab, transform.position + offSet, Quaternion.identity);
+                    }
+                    else
+                    {
+                        soundSource.PlayOneShot(_noAmmo);
+                    }
+                    
+                }
             }
+            
         }
     }
 
@@ -288,6 +313,16 @@ public class Player : MonoBehaviour
               leftEngineDmg.SetActive(false);
             }
         }
+    }
+
+    public void AmmoPowerUp()
+    {
+        if (_playerAmmo < 15)
+        {
+            _playerAmmo = 15;
+            soundSource.PlayOneShot(_reload);
+        }
+            
     }
 
      public void AddScore(int points)
