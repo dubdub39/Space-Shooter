@@ -34,7 +34,7 @@ public class UI_Manager : MonoBehaviour
     void Start()
     {
         scoreText.text = "Score: " +  0;
-        ammoText.text = "Ammo: " + 15;
+        ammoText.text = "Ammo: " + _playerAmmo;
         gameOverText.gameObject.SetActive(false);
         restartLevelText.gameObject.SetActive(false);
         gameManager = GameObject.Find("Game_Manager").GetComponent<Game_Manager>();
@@ -59,6 +59,11 @@ public class UI_Manager : MonoBehaviour
         {
             GameOverSequence();
         }
+    }
+
+    public void DisplayAmmo(int ammo)
+    {
+        ammoText.text = "Ammo: " + ammo;
     }
 
     void GameOverSequence()

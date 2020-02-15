@@ -187,6 +187,7 @@ public class Player : MonoBehaviour
                 }
                 else
                 {
+                    _uiManager.DisplayAmmo(_playerAmmo);
                     if(_playerAmmo > 0)
                     {
                         _playerAmmo--;
@@ -320,6 +321,7 @@ public class Player : MonoBehaviour
         if (_playerAmmo < 15)
         {
             _playerAmmo = 15;
+            _uiManager.DisplayAmmo(_playerAmmo);
             soundSource.PlayOneShot(_reload);
         }
             
