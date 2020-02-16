@@ -1030,7 +1030,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1815,7 +1815,7 @@ MonoBehaviour:
     type: 3}
   score: 0
   thrusters: {fileID: 845171855}
-  fuelBurningSpeed: 1
+  fuelBurningSpeed: 0.5
   fuelRecoverySpeed: 0.5
   _playerAmmo: 15
 --- !u!212 &1468792289

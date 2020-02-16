@@ -141,14 +141,20 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                currentThrust += 0.15f * Time.deltaTime;
+                
+             
+             if (currentThrust < 1.0f)
+                currentThrust += 1f * Time.deltaTime;
                 thrusters.SliderAmount(currentThrust);
-                transform.Translate(direction * powerUpSpeed * shiftSpeed * Time.deltaTime);
+             
+                
+            transform.Translate(direction * powerUpSpeed * shiftSpeed * Time.deltaTime);
             } else
             {
                 if (currentThrust > 0)
                 {
-                    currentThrust -= fuelBurningSpeed * Time.deltaTime;
+                    currentThrust -= fuelRecoverySpeed * Time.deltaTime;
+                    thrusters.SliderAmount(currentThrust);
                 }
                 transform.Translate(direction * powerUpSpeed * Time.deltaTime);
             }
@@ -156,14 +162,17 @@ public class Player : MonoBehaviour
             
         } else if (isSpeedPowerupActive == false && Input.GetKey(KeyCode.LeftShift))
         {
-            currentThrust += 0.15f * Time.deltaTime;
-            thrusters.SliderAmount(currentThrust);
+            
+            if (currentThrust < 1.0f)
+                currentThrust += 1f * Time.deltaTime;
+                thrusters.SliderAmount(currentThrust);
+
             transform.Translate(direction * speed * shiftSpeed * Time.deltaTime);
         }  else
         {
             if (currentThrust > 0)
             {
-                currentThrust -= fuelBurningSpeed * Time.deltaTime;
+                currentThrust -= fuelRecoverySpeed * Time.deltaTime;
             }
             
             thrusters.SliderAmount(currentThrust);

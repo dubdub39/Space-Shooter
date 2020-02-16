@@ -22,7 +22,7 @@ public class Thrusters : MonoBehaviour
     {
         if (slider.value <= slider.minValue)
             fillImage.enabled = false;
-        if (slider.value >= slider.minValue && !fillImage.enabled)
+        if (slider.value > slider.minValue && !fillImage.enabled)
             fillImage.enabled = true;
 
         
@@ -30,7 +30,7 @@ public class Thrusters : MonoBehaviour
 
     public void SliderAmount(float sliderValue)
     {
-        slider.value = sliderValue;
         
-    }
+        slider.value = sliderValue;
+     }
 }
