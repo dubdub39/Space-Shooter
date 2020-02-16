@@ -86,6 +86,14 @@ public class Player : MonoBehaviour
     private UI_Manager _uiManager;
 
     [SerializeField]
+    private Thrusters thrusters;
+
+    private float currentThrust = 0;
+
+    [SerializeField]
+    private float fuelBurningSpeed, fuelRecoverySpeed;
+
+    [SerializeField]
     private int _playerAmmo = 15;
 
     void Start()
@@ -133,18 +141,32 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
+                currentThrust += 0.15f * Time.deltaTime;
+                thrusters.SliderAmount(currentThrust);
                 transform.Translate(direction * powerUpSpeed * shiftSpeed * Time.deltaTime);
             } else
             {
+                if (currentThrust > 0)
+                {
+                    currentThrust -= fuelBurningSpeed * Time.deltaTime;
+                }
                 transform.Translate(direction * powerUpSpeed * Time.deltaTime);
             }
             
             
         } else if (isSpeedPowerupActive == false && Input.GetKey(KeyCode.LeftShift))
         {
+            currentThrust += 0.15f * Time.deltaTime;
+            thrusters.SliderAmount(currentThrust);
             transform.Translate(direction * speed * shiftSpeed * Time.deltaTime);
         }  else
         {
+            if (currentThrust > 0)
+            {
+                currentThrust -= fuelBurningSpeed * Time.deltaTime;
+            }
+            
+            thrusters.SliderAmount(currentThrust);
             transform.Translate(direction * speed * Time.deltaTime);
         }
         
