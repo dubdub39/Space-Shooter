@@ -115,5 +115,18 @@ public class Enemy : MonoBehaviour
             
         }
 
+        if (other.gameObject.tag == "BigLaser")
+        {
+            if (_player != null)
+            {
+                _player.AddScore(10);
+            }
+            newcollider.enabled = false;
+            anim.SetTrigger("OnEnemyDeath");
+            _audioSource.Play();
+            Destroy(this.gameObject, 2.0f);
+
+        }
+
     }
 }

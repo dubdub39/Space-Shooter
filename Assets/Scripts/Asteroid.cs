@@ -35,6 +35,14 @@ public class Asteroid : MonoBehaviour
             Destroy(this.gameObject, 0.15f);
 
         }
-    }
 
+        if (other.gameObject.tag == "BigLaser")
+        {
+            Instantiate(explosion, transform.position, Quaternion.identity);
+            _spawnManager.StartSpawning();
+            Destroy(this.gameObject, 0.15f);
+
+        }
+    }
+    
 }

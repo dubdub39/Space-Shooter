@@ -141,11 +141,13 @@ public class Player : MonoBehaviour
         {
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                
-             
-             if (currentThrust < 1.0f)
-                currentThrust += 1f * Time.deltaTime;
-                thrusters.SliderAmount(currentThrust);
+
+
+                if (currentThrust < 1.0f)
+                {
+                    currentThrust += 1f * Time.deltaTime;
+                    thrusters.SliderAmount(currentThrust);
+                }
              
                 
             transform.Translate(direction * powerUpSpeed * shiftSpeed * Time.deltaTime);
