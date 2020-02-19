@@ -51,6 +51,9 @@ public class Player : MonoBehaviour
     GameObject shield; //variable reference to the shield visualizer
 
     [SerializeField]
+    GameObject LaserBeam;
+
+    [SerializeField]
     GameObject rightEngineDmg, leftEngineDmg;
 
     [SerializeField]
@@ -360,7 +363,13 @@ public class Player : MonoBehaviour
             
     }
 
-     public void AddScore(int points)
+    public void LaserPowerUp()
+    {
+        LaserBeam.SetActive(true);
+
+    }
+
+    public void AddScore(int points)
     {
         score += points;
         _uiManager.UpdateScore(score);

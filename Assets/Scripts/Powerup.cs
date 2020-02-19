@@ -52,6 +52,9 @@ public class Powerup : MonoBehaviour
                     case 4:
                         player.AmmoPowerUp();
                         break;
+                    case 5:
+                        player.LaserPowerUp();
+                        break;
                     default:
                         print("default value");
                         break;

@@ -203,6 +203,7 @@ MonoBehaviour:
   - {fileID: 3580017145703533686, guid: 34d71788b0584344d9f387dbe4a73035, type: 3}
   - {fileID: 1725390345073840923, guid: 77cb09bceeb9488449f55de6bb8b362e, type: 3}
   - {fileID: 45655219818891340, guid: 169248cacdba39d4ea7b24bf0faabd67, type: 3}
+  - {fileID: 935691824979199348, guid: 42c2d207d65363a43a7c694563426b15, type: 3}
 --- !u!4 &171874921
 Transform:
   m_ObjectHideFlags: 0
@@ -1801,6 +1802,7 @@ MonoBehaviour:
   tripleLaserOffset: {x: -1.55, y: 1.05, z: 0}
   lives: 3
   shield: {fileID: 759407663}
+  LaserBeam: {fileID: 1559838012}
   rightEngineDmg: {fileID: 197894335}
   leftEngineDmg: {fileID: 298378630}
   soundSource: {fileID: 1053796986}
