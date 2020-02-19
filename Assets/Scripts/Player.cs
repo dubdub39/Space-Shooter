@@ -46,6 +46,7 @@ public class Player : MonoBehaviour
     private bool isSpeedPowerupActive = false;
     private bool isShieldActive = false;
     private bool isPlayerDamaged = false;
+    private bool isLaserPowerupActive = false;
    
     [SerializeField]
     GameObject shield; //variable reference to the shield visualizer
@@ -120,6 +121,8 @@ public class Player : MonoBehaviour
 
         soundSource = GetComponent<AudioSource>();
         soundSource.clip = laserShot;
+
+        
     }
     void Update()
     {
@@ -210,7 +213,7 @@ public class Player : MonoBehaviour
     }
     void FireLaser()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && Time.time > canFire)
+        if (Input.GetKeyDown(KeyCode.Space) && Time.time > canFire && isLaserPowerupActive == false)
         {
             
             {
@@ -365,8 +368,19 @@ public class Player : MonoBehaviour
 
     public void LaserPowerUp()
     {
-        LaserBeam.SetActive(true);
+        
 
+        StartCoroutine(LaserDisable());        
+
+    }
+
+    IEnumerator LaserDisable()
+    {
+        isLaserPowerupActive = true;
+        LaserBeam.SetActive(true);
+        yield return new WaitForSeconds(5);
+        isLaserPowerupActive = false;
+        LaserBeam.SetActive(false);
     }
 
     public void AddScore(int points)
